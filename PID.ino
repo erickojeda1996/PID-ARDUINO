@@ -57,7 +57,7 @@ float Ki = 0.03;
 float Kd = 0.13;
 
 float Kp1 = 0.3;                                                       
-float Ki1 = 0.08;                                                      
+float Ki1 = 0.03;                                                      
 float Kd1 = 0.13;
 long cas=0; 
 //INIT PID
