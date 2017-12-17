@@ -133,7 +133,7 @@ void loop()
       Input=((p.x-40)*convertX)/10000;  // read and convert X coordinate
       Input1=((p.y-60) * convertY)/10000; // read and convert Y coordinate 
       
-          if((Input>(x-5) && Input<(x+5) && Input1>(x1-5) && Input1<(x1+5)))//if ball is close to setpoint
+          if((Input>(x-12) && Input<(x+12) && Input1>(x1-12) && Input1<(x1+12)))//if ball is close to setpoint
           {
               Stable=Stable+1; //increment STABLE
               digitalWrite(9,HIGH);
@@ -170,7 +170,7 @@ void loop()
   }
   servo1.write(Output);//control
   servo2.write(Output1);//control 
-  Serial.print(x);   Serial.print("  ,   ");  Serial.print(x1);  Serial.print("  ,   ");  Serial.print(Input);Serial.print("  ,   "); Serial.print(Input1);  Serial.print("  ,   "); Serial.println(Output);
+  Serial.print(x);   Serial.print("  ,   ");  Serial.print(x1);  Serial.print("  ,   ");  Serial.print(Input);Serial.print("  ,   "); Serial.print(Input1);  Serial.print("  ,   "); Serial.println(Stable);
      
 }////END OF REGULATION LOOP///
   
@@ -182,9 +182,9 @@ void loop()
  { //still measure actual postiion
 //    setDesiredPosition(); 
     TSPoint p = ts.getPoint();
-     Input=(p.x * convertX);  //read X
-      Input1=(p.y * convertY); //read Y
-    if(Input<x-2 || Input>x+2 || Input1>x1+2 || Input1<x1-2  ) //if ball isnt close to setpoint
+     Input=((p.x-40)*convertX)/10000;  // read and convert X coordinate
+      Input1=((p.y-60) * convertY)/10000; // read and convert Y coordinate
+    if(Input<x-12 || Input>x+12 || Input1>x1+12 || Input1<x1-12  ) //if ball isnt close to setpoint
     {
       servo1.attach(6); //again attach servos
       servo2.attach(5);
