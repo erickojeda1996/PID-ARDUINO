@@ -87,13 +87,13 @@ void setup()
    Input=120;
    Input1=65;
   //INIT SETPOINT
-  Setpoint=161;
-  Setpoint1=102;
-    x = 161;
-   x1 = 102;
+  Setpoint=153;
+  Setpoint1=81;
+    x = 153;
+   x1 = 81;
   //// Make plate flat
   servo1.attach(6); 
-  servo2.attach(7);
+  servo2.attach(5);
   Output=90;
   Output1=90;
   servo1.write(Output);
@@ -122,11 +122,11 @@ void loop()
    TSPoint p = ts.getPoint();   //measure pressure on plate
    if (p.z > 2000) //ball is on plate
    {  
-      Setpoint=161;
-      Setpoint1=102;
+      Setpoint=153;
+      Setpoint1=81;
   
       servo1.attach(6); //connect servos
-      servo2.attach(7); 
+      servo2.attach(5); 
 //      setDesiredPosition();  
       noTouchCount = 0;  
       TSPoint p = ts.getPoint(); // measure actual position 
@@ -187,7 +187,7 @@ void loop()
     if(Input<x-2 || Input>x+2 || Input1>x1+2 || Input1<x1-2  ) //if ball isnt close to setpoint
     {
       servo1.attach(6); //again attach servos
-      servo2.attach(7);
+      servo2.attach(5);
       digitalWrite(9,LOW);
       Stable=0; //change STABLE state
     }
