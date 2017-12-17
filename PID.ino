@@ -46,8 +46,8 @@ Servo servo2; //Y axis
 uint16_t homeX = 550;            // raw data value for center of touchscreen
 uint16_t homeY = 550;            // raw data value for center of touchscreen             
 
-float convertX =  3191.4894;  // converts raw x values to mm. found through manual calibration
-float convertY = 5113.6363;   // converts raw y values to mm. found through manual calibration
+float convertX =  3205.1282;  // converts raw x values to mm. found through manual calibration
+float convertY = 2435.0649;   // converts raw y values to mm. found through manual calibration
 /////TIME SAMPLE
 int Ts = 50; 
 unsigned long Stable=0; 
@@ -67,12 +67,12 @@ PID myPID1(&Input1, &Output1, &Setpoint1,Kp1,Ki1,Kd1, DIRECT);
  int x1 ;
 void setup()
 {
-
+ TSPoint p = ts.getPoint();
   
   //init NUN
-  nunchuk_setpowerpins();
-  nunchuk_init();
-  nunchuk_get_data(); 
+//  nunchuk_setpowerpins();
+//  nunchuk_init();
+//  nunchuk_get_data(); 
  
   //INIT PINS
   pinMode(9, OUTPUT);
@@ -83,9 +83,8 @@ void setup()
   Serial.begin(9600);
   
   //INIT OF TOUSCHSCREEN
-   TSPoint p = ts.getPoint();
-   Input=120;
-   Input1=65;
+  
+
   //INIT SETPOINT
   Setpoint=153;
   Setpoint1=81;
@@ -107,20 +106,19 @@ void setup()
   // TIME SAMPLE
   myPID1.SetSampleTime(Ts); 
   myPID.SetSampleTime(Ts);  
-  /////
+  /////sssss
  
   delay(500);
-  
- 
+   
   ///
  }
  
 void loop()
 {
-  while(Stable<125) //REGULATION LOOP
+  while(Stable<125) //  REGULATION LOOP
   {
    TSPoint p = ts.getPoint();   //measure pressure on plate
-   if (p.z > 2000) //ball is on plate
+   if (p.z < 2010) //ball is on plate
    {  
       Setpoint=153;
       Setpoint1=81;
@@ -129,15 +127,14 @@ void loop()
       servo2.attach(5); 
 //      setDesiredPosition();  
       noTouchCount = 0;  
-      TSPoint p = ts.getPoint(); // measure actual position 
-      Input=((p.x-40)*convertX)/10000;  // read and convert X coordinate
-      Input1=((p.y-60) * convertY)/10000; // read and convert Y coordinate 
+  // measure actual position 
+      Input=((p.x-44)*convertX)/10000;  // read and convert X coordinate
+      Input1=((p.y-66) * convertY)/10000; // read and convert Y coordinate 
       
           if((Input>(x-12) && Input<(x+12) && Input1>(x1-12) && Input1<(x1+12)))//if ball is close to setpoint
           {
               Stable=Stable+1; //increment STABLE
               digitalWrite(9,HIGH);
-                 
           }
           else
           {
@@ -170,8 +167,8 @@ void loop()
   }
   servo1.write(Output);//control
   servo2.write(Output1);//control 
-  Serial.print(x);   Serial.print("  ,   ");  Serial.print(x1);  Serial.print("  ,   ");  Serial.print(Input);Serial.print("  ,   "); Serial.print(Input1);  Serial.print("  ,   "); Serial.println(Stable);
-     
+ 
+ Serial.print(x);   Serial.print("  ,   ");  Serial.print(x1);  Serial.print("  ,   ");  Serial.print(Input);Serial.print("  ,   "); Serial.print(Input1);  Serial.print("  ,   "); Serial.println(Stable);     
 }////END OF REGULATION LOOP///
   
   servo1.detach();//detach servos
