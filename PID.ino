@@ -75,9 +75,9 @@ void setup()
 //  nunchuk_get_data(); 
  
   //INIT PINS
-  pinMode(9, OUTPUT);
+  pinMode(13, OUTPUT);
   pinMode(8, OUTPUT);
-  digitalWrite(9,LOW); //LED INIT
+  digitalWrite(13,LOW); //LED INIT
   digitalWrite(8,LOW);
 
   Serial.begin(9600);
@@ -87,9 +87,9 @@ void setup()
 
   //INIT SETPOINT
   Setpoint=153;
-  Setpoint1=81;
+  Setpoint1=108;
     x = 153;
-   x1 = 81;
+   x1 = 108;
   //// Make plate flat
   servo1.attach(6); 
   servo2.attach(5);
@@ -115,13 +115,15 @@ void setup()
  
 void loop()
 {
+  
   while(Stable<125) //  REGULATION LOOP
   {
-   TSPoint p = ts.getPoint();   //measure pressure on plate
+     TSPoint p = ts.getPoint();
+     //measure pressure on plate
    if (p.z < 2010) //ball is on plate
    {  
       Setpoint=153;
-      Setpoint1=81;
+      Setpoint1=108;
   
       servo1.attach(6); //connect servos
       servo2.attach(5); 
@@ -134,11 +136,11 @@ void loop()
           if((Input>(x-12) && Input<(x+12) && Input1>(x1-12) && Input1<(x1+12)))//if ball is close to setpoint
           {
               Stable=Stable+1; //increment STABLE
-              digitalWrite(9,HIGH);
+              digitalWrite(13,HIGH);
           }
           else
           {
-              digitalWrite(9,LOW);
+              digitalWrite(13,LOW);
           }
        myPID.Compute();  //action control X compute
        myPID1.Compute(); //   action control  Y compute   
@@ -156,19 +158,22 @@ void loop()
 
      servo1.write(Output); 
      servo2.write(Output1); 
+     Setpoint = x;
+     Setpoint1 = x1; 
    
     }
     if(noTouchCount == 150) //if there is no ball on plate longer
     {
      servo1.detach(); //detach servos
-     servo2.detach();     
+     servo2.detach();
+    
      
     }
   }
   servo1.write(Output);//control
   servo2.write(Output1);//control 
  
- Serial.print(x);   Serial.print("  ,   ");  Serial.print(x1);  Serial.print("  ,   ");  Serial.print(Input);Serial.print("  ,   "); Serial.print(Input1);  Serial.print("  ,   "); Serial.println(Stable);     
+ Serial.print(x);   Serial.print("  ,   ");  Serial.print(x1);  Serial.print("  ,   ");  Serial.print(Input);Serial.print("  ,   "); Serial.print(Input1);  Serial.print("  ,   "); Serial.println(p.z);     
 }////END OF REGULATION LOOP///
   
   servo1.detach();//detach servos
@@ -185,7 +190,7 @@ void loop()
     {
       servo1.attach(6); //again attach servos
       servo2.attach(5);
-      digitalWrite(9,LOW);
+      digitalWrite(13,LOW);
       Stable=0; //change STABLE state
     }
     
