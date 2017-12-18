@@ -100,16 +100,14 @@ void setup()
   
   //Zapnutie PID
   myPID.SetMode(AUTOMATIC);
-  myPID.SetOutputLimits(0, 180);
+  myPID.SetOutputLimits(65, 120);
   myPID1.SetMode(AUTOMATIC);
-  myPID1.SetOutputLimits(0, 180);
-  // TIME SAMPLE
+  myPID1.SetOutputLimits(65, 120);
+  // TIME SAMPLE 
   myPID1.SetSampleTime(Ts); 
   myPID.SetSampleTime(Ts);  
   /////sssss
- 
-  delay(500);
-   
+
   ///
  }
  
@@ -120,8 +118,9 @@ void loop()
   {
      TSPoint p = ts.getPoint();
      //measure pressure on plate
-   if (p.z < 2000) //ball is on plate
+   if (p.z < 310||p.z>330) //ball is on plate
    {  
+       TSPoint p = ts.getPoint();
       Setpoint=153;
       Setpoint1=108;
   
@@ -162,18 +161,18 @@ void loop()
      Setpoint1 = x1; 
    
     }
-    if(noTouchCount == 150) //if there is no ball on plate longer
+    if(noTouchCount >= 150) //if there is no ball on plate longer
     {
      servo1.detach(); //detach servos
      servo2.detach();
-    
+     noTouchCount = 150;
      
     }
   }
   servo1.write(Output);//control
   servo2.write(Output1);//control 
  
- Serial.print(x);   Serial.print("  ,   ");  Serial.print(x1);  Serial.print("  ,   ");  Serial.print(Input);Serial.print("  ,   "); Serial.print(Input1);  Serial.print("  ,   "); Serial.println(p.z);     
+ Serial.print(x);   Serial.print("  ,   ");  Serial.print(x1);  Serial.print("  ,   ");  Serial.print(Input);Serial.print("  ,   "); Serial.print(Input1);  Serial.print("  ,   "); Serial.println(noTouchCount);     
 }////END OF REGULATION LOOP///
   
   servo1.detach();//detach servos
