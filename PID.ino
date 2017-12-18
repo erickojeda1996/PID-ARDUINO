@@ -120,7 +120,7 @@ void loop()
   {
      TSPoint p = ts.getPoint();
      //measure pressure on plate
-   if (p.z < 2010) //ball is on plate
+   if (p.z < 2000) //ball is on plate
    {  
       Setpoint=153;
       Setpoint1=108;
